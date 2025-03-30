@@ -1,12 +1,3 @@
-# 1. Desenvolva um programa em Python para criar uma base de dados com o SQLite e uma tabela com uma chave primária, pelo menos duas colunas obrigatória e pelo menos duas colunas opcionais. 
-
-
-# 2. Implemente um programa em Python para inserir dados na tabela criada. Insira pelo menos quatro registros na tabela
-
-
-# 3. Faça um programa em Python para consultar todos os registros inseridos na tabela criada. Mostre os registros na horizontal e depois na vertical. E inclua a mensagem de “Tabela vazia.”
-
-from operator import le
 import pathlib
 import sqlite3
 import os
@@ -249,6 +240,7 @@ try:
 
 
     def jogar():
+        sons["jogar"].play()
         # construindo jogo
         limpar_terminal()
         # verrificar se tem jogador cadastrado
@@ -330,6 +322,7 @@ try:
 
     def placar():
         limpar_terminal()
+        sons["rank"].play()
         usuarios = consultar_usuario()
         rank = sorted(usuarios, key=lambda usuario: usuario["recorde"], reverse=True)
 
@@ -356,12 +349,19 @@ try:
 
     def adicionar_quiz():
         limpar_terminal()
+        sons["new"].play()
         cabecalho("NOVO QUIZ")
         resposta = str(input("Resposta: ")).strip()
         tipo = str(input("Tipo: ")).strip()
         dica1 = str(input("Dica 1 (enter pra pular): ")).strip()
         dica2 = str(input("Dica 2 (enter pra pular): ")).strip()
-        inserir_quiz(resposta, tipo, dica1, dica2)
+        if resposta and tipo:
+            inserir_quiz(resposta, tipo, dica1, dica2)
+            print(colorir('Nova pergunta cadastrada', 'verde'))
+            sleep(1)
+        else:
+            print(colorir('Não informou todos os dados obrigatorios'))
+            sleep(1)
         criar_texto_formatado("Pressione Enter para voltar!","elegante")
         input()
         main()
@@ -369,11 +369,18 @@ try:
 
     def cadastrar():
         limpar_terminal()
+        sons["new"].play()
         cabecalho("CADASTRO")
         nome = str(input("Nome: "))
-        inserir_usuario(nome)
-        print(colorir("CADASTRADO!", 'verde'))
-        sleep(0.5)
+        if nome:
+            inserir_usuario(nome)
+            print(colorir("CADASTRADO!", 'verde'))
+            sleep(1)
+        else:
+            print(colorir("Nome não informado!", 'vermelho'))
+            sleep(1)
+        criar_texto_formatado("Pressione Enter para voltar!","elegante")
+        input()
         main()
 
     # menu inicial   
@@ -396,6 +403,9 @@ try:
     'erro': pygame.mixer.Sound(f"{CAMINHO}/musicas/efeitos/incorreto.wav"),
     'venceu': pygame.mixer.Sound(f"{CAMINHO}/musicas/efeitos/venceu.wav"),
     'perdeu': pygame.mixer.Sound(f"{CAMINHO}/musicas/efeitos/perdeu.wav"),
+    'jogar': pygame.mixer.Sound(f"{CAMINHO}/musicas/efeitos/jogar.wav"),
+    'rank': pygame.mixer.Sound(f"{CAMINHO}/musicas/efeitos/rank.wav"),
+    'new': pygame.mixer.Sound(f"{CAMINHO}/musicas/efeitos/new.wav"),
     'sair': pygame.mixer.Sound(F"{CAMINHO}/musicas/efeitos/sair.wav")
     }
 
